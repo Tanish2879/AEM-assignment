@@ -1,0 +1,107 @@
+<!--/*
+    Team Members Component HTL Script
+    Adapts com.mysite.core.models.TeamMembersModel
+*/-->
+<sly data-sly-use.clientlib="/libs/granite/sightly/templates/clientlib.html"
+     data-sly-call="${clientlib.all @ categories='mysite.teammembers'}"></sly>
+
+<div data-sly-use.team="com.mysite.core.models.TeamMembersModel"
+     data-sly-use.templates="core/wcm/components/commons/v1/templates.html"
+     class="cmp-teammembers"
+     data-cmp-is="teammembers">
+
+    <!--/* Placeholder for Author mode when component is empty */-->
+    <sly data-sly-call="${templates.placeholder @ isEmpty = !team.hasMembers, classAppend='cmp-teammembers'}"></sly>
+
+    <div class="cmp-teammembers__container" data-sly-test="${team.hasMembers}">
+        <!--/* Header Section */-->
+        <header class="cmp-teammembers__header" data-sly-test="${team.hasHeader}">
+            <span class="cmp-teammembers__subtitle" data-sly-test="${team.subtitle}">${team.subtitle}</span>
+            <h2 class="cmp-teammembers__title" data-sly-test="${team.title}">${team.title}</h2>
+            <p class="cmp-teammembers__description" data-sly-test="${team.description}">${team.description}</p>
+        </header>
+
+        <!--/* Interactive Controls (Search & Role Filter) */-->
+        <div class="cmp-teammembers__controls" data-sly-test="${team.memberCount > 1}">
+            <div class="cmp-teammembers__search-box">
+                <input type="text"
+                       class="cmp-teammembers__search-input"
+                       placeholder="Search team members by name or role..."
+                       aria-label="Search team members" />
+                <button type="button" class="cmp-teammembers__search-clear" aria-label="Clear search" title="Clear">&times;</button>
+            </div>
+            <div class="cmp-teammembers__filters" role="tablist" aria-label="Filter members by role">
+                <button type="button" class="cmp-teammembers__filter-btn cmp-teammembers__filter-btn--active" data-filter="all">All</button>
+            </div>
+        </div>
+
+        <!--/* Team Members Grid */-->
+        <div class="cmp-teammembers__grid" role="list">
+            <div data-sly-repeat.member="${team.members}"
+                 class="cmp-teammembers__card"
+                 role="listitem"
+                 data-member-name="${member.name}"
+                 data-member-role="${member.role}"
+                 tabindex="0">
+                <div class="cmp-teammembers__card-inner">
+                    <!--/* Avatar / Image */-->
+                    <div class="cmp-teammembers__avatar-wrapper">
+                        <sly data-sly-test="${member.hasPhoto}">
+                            <img class="cmp-teammembers__avatar-img"
+                                 src="${member.photo}"
+                                 alt="${member.name}"
+                                 loading="lazy" />
+                        </sly>
+                        <sly data-sly-test="${!member.hasPhoto}">
+                            <div class="cmp-teammembers__avatar-fallback" aria-hidden="true">
+                                <span>${member.initials}</span>
+                            </div>
+                        </sly>
+                    </div>
+
+                    <!--/* Card Info */-->
+                    <div class="cmp-teammembers__info">
+                        <h3 class="cmp-teammembers__name">${member.name}</h3>
+                        <span class="cmp-teammembers__role">${member.role}</span>
+                        
+                        <p class="cmp-teammembers__bio" data-sly-test="${member.bio}">
+                            ${member.bio}
+                        </p>
+
+                        <!--/* Social & Contact Actions */-->
+                        <div class="cmp-teammembers__actions" data-sly-test="${member.email || member.linkedin}">
+                            <a data-sly-test="${member.email}"
+                               href="mailto:${member.email}"
+                               class="cmp-teammembers__action-link cmp-teammembers__action-link--email"
+                               aria-label="Email ${member.name}"
+                               title="Email ${member.name}">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                <span>Email</span>
+                            </a>
+                            <a data-sly-test="${member.linkedin}"
+                               href="${member.linkedin}"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                               class="cmp-teammembers__action-link cmp-teammembers__action-link--linkedin"
+                               aria-label="${member.name} LinkedIn Profile"
+                               title="LinkedIn Profile">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+                                <span>LinkedIn</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!--/* Interactive Highlight / Quick View trigger */-->
+                    <button type="button" class="cmp-teammembers__card-toggle" aria-label="Toggle details for ${member.name}">
+                        <span class="cmp-teammembers__card-toggle-text">View Profile</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!--/* Empty Search Feedback */-->
+        <div class="cmp-teammembers__no-results" style="display: none;">
+            <p>No team members found matching your search.</p>
+        </div>
+    </div>
+</div>

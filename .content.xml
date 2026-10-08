@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jcr:root xmlns:jcr="http://www.jcp.org/jcr/1.0" xmlns:cq="http://www.day.com/jcr/cq/1.0"
+    jcr:description="Team Members component displaying a repeatable list of team members with photo, name, role, and bio."
+    jcr:primaryType="cq:Component"
+    jcr:title="Team Members"
+    componentGroup="My Site - Content"/>
